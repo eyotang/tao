@@ -42,10 +42,6 @@ func (em Message) ResponseName() string {
 	return EchoMessageName
 }
 
-func (em Message) Len() int64 {
-	return int64(len(em.Content))
-}
-
 // DeserializeMessage deserializes bytes into Message.
 func DeserializeMessage(data []byte) (message tao.Message, err error) {
 	if data == nil {

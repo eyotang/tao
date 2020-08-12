@@ -43,10 +43,6 @@ func (cm Message) Serialize() ([]byte, error) {
 	return []byte(cm.Content), nil
 }
 
-func (cm Message) Len() int64 {
-	return int64(len(cm.Content))
-}
-
 // DeserializeMessage deserializes bytes into Message.
 func DeserializeMessage(data []byte) (message tao.Message, err error) {
 	if data == nil {

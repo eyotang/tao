@@ -30,10 +30,6 @@ func (pp Message) ResponseName() string {
 	return PingPongMessageName
 }
 
-func (pp Message) Len() int64 {
-	return int64(len(pp.Info))
-}
-
 // Serialize serializes Message into bytes.
 func (pp Message) Serialize() ([]byte, error) {
 	return []byte(pp.Info), nil

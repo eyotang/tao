@@ -87,7 +87,6 @@ func GetHandlerFunc(msgType int32) HandlerFunc {
 
 // Message represents the structured data that can be handled.
 type Message interface {
-	Len() int64
 	RequestName() string
 	ResponseName() string
 	RequestCommand() int32
@@ -98,10 +97,6 @@ type Message interface {
 // HeartBeatMessage for application-level keeping alive.
 type HeartBeatMessage struct {
 	Timestamp int64
-}
-
-func (hbm HeartBeatMessage) Len() int64 {
-	return int64(buf.Len())
 }
 
 // Serialize serializes HeartBeatMessage into bytes.
