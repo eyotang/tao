@@ -36,8 +36,12 @@ Every message must define according to the interface and a deserialization
 function:
 
   type Message interface {
-	 MessageNumber() int32
-   Serialize() ([]byte, error)
+	Len() int64
+	RequestName() string
+	ResponseName() string
+	RequestCommand() int32
+	ResponseCommand() int32
+	Serialize() ([]byte, error)
   }
 
   func Deserialize(data []byte) (message Message, err error)

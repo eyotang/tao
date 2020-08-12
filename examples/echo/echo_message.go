@@ -3,8 +3,13 @@ package echo
 import (
 	"context"
 
+	"github.com/eyotang/tao"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
+)
+
+const (
+	EchoMessage     int32 = 1
+	EchoMessageName       = "EchoMessage"
 )
 
 // Message defines the echo message.
@@ -17,9 +22,28 @@ func (em Message) Serialize() ([]byte, error) {
 	return []byte(em.Content), nil
 }
 
-// MessageNumber returns message type number.
-func (em Message) MessageNumber() int32 {
-	return 1
+// RequestCommand returns request command.
+func (em Message) RequestCommand() int32 {
+	return EchoMessage
+}
+
+// ResponseCommand returns response command.
+func (em Message) ResponseCommand() int32 {
+	return EchoMessage
+}
+
+// RequestName returns request name.
+func (em Message) RequestName() string {
+	return EchoMessageName
+}
+
+// ResponseName returns response name.
+func (em Message) ResponseName() string {
+	return EchoMessageName
+}
+
+func (em Message) Len() int64 {
+	return int64(len(em.Content))
 }
 
 // DeserializeMessage deserializes bytes into Message.

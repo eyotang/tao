@@ -6,9 +6,9 @@ import (
 	"net"
 	"os"
 
+	"github.com/eyotang/tao"
+	"github.com/eyotang/tao/examples/chat"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
-	"github.com/leesper/tao/examples/chat"
 )
 
 func main() {

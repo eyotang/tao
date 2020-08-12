@@ -1,10 +1,11 @@
 package pingpong
 
-import "github.com/leesper/tao"
+import "github.com/eyotang/tao"
 
 const (
-	// PingPontMessage defines message number.
-	PingPontMessage int32 = 1
+	// PingPongMessage defines message number.
+	PingPongMessage     int32 = 1
+	PingPongMessageName       = "PingPongMessage"
 )
 
 // Message defines message format.
@@ -12,9 +13,25 @@ type Message struct {
 	Info string
 }
 
-// MessageNumber returns the message number.
-func (pp Message) MessageNumber() int32 {
-	return PingPontMessage
+// RequestCommand returns the request command.
+func (pp Message) RequestCommand() int32 {
+	return PingPongMessage
+}
+
+func (pp Message) ResponseCommand() int32 {
+	return PingPongMessage
+}
+
+func (pp Message) RequestName() string {
+	return PingPongMessageName
+}
+
+func (pp Message) ResponseName() string {
+	return PingPongMessageName
+}
+
+func (pp Message) Len() int64 {
+	return int64(len(pp.Info))
 }
 
 // Serialize serializes Message into bytes.

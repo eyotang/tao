@@ -13,7 +13,8 @@ import (
 
 const (
 	// HeartBeat is the default heart beat message number.
-	HeartBeat = 0
+	HeartBeat     = 0
+	HeartBeatName = "HeartBeat"
 )
 
 // Handler takes the responsibility to handle incoming messages.
@@ -86,13 +87,21 @@ func GetHandlerFunc(msgType int32) HandlerFunc {
 
 // Message represents the structured data that can be handled.
 type Message interface {
-	MessageNumber() int32
+	Len() int64
+	RequestName() string
+	ResponseName() string
+	RequestCommand() int32
+	ResponseCommand() int32
 	Serialize() ([]byte, error)
 }
 
 // HeartBeatMessage for application-level keeping alive.
 type HeartBeatMessage struct {
 	Timestamp int64
+}
+
+func (hbm HeartBeatMessage) Len() int64 {
+	return int64(buf.Len())
 }
 
 // Serialize serializes HeartBeatMessage into bytes.
@@ -105,9 +114,24 @@ func (hbm HeartBeatMessage) Serialize() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// MessageNumber returns message number.
-func (hbm HeartBeatMessage) MessageNumber() int32 {
+// RequestCommand returns message number.
+func (hbm HeartBeatMessage) RequestCommand() int32 {
 	return HeartBeat
+}
+
+// ResponseCommand returns message number.
+func (hbm HeartBeatMessage) ResponseCommand() int32 {
+	return HeartBeat
+}
+
+// RequestName returns message name.
+func (hbm HeartBeatMessage) RequestName() string {
+	return HeartBeatName
+}
+
+// ResponseName returns message name.
+func (hbm HeartBeatMessage) ResponseName() string {
+	return HeartBeatName
 }
 
 // DeserializeHeartBeat deserializes bytes into Message.
@@ -221,7 +245,7 @@ func (codec TypeLengthValueCodec) Encode(msg Message) ([]byte, error) {
 		return nil, err
 	}
 	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.LittleEndian, msg.MessageNumber())
+	binary.Write(buf, binary.LittleEndian, msg.RequestCommand())
 	binary.Write(buf, binary.LittleEndian, int32(len(data)))
 	buf.Write(data)
 	packet := buf.Bytes()

@@ -3,13 +3,14 @@ package chat
 import (
 	"context"
 
+	"github.com/eyotang/tao"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
 )
 
 const (
 	// ChatMessage is the message number of chat message.
-	ChatMessage int32 = 1
+	ChatMessage     int32 = 1
+	ChatMessageName       = "ChatMessage"
 )
 
 // Message defines the chat message.
@@ -17,14 +18,33 @@ type Message struct {
 	Content string
 }
 
-// MessageNumber returns the message number.
-func (cm Message) MessageNumber() int32 {
+// RequestCommand returns the request command.
+func (cm Message) RequestCommand() int32 {
 	return ChatMessage
+}
+
+// ResponseCommand returns the response command.
+func (cm Message) ResponseCommand() int32 {
+	return ChatMessage
+}
+
+// RequestName returns the request name.
+func (cm Message) RequestName() string {
+	return ChatMessageName
+}
+
+// ResponseName returns the response name.
+func (cm Message) ResponseName() string {
+	return ChatMessageName
 }
 
 // Serialize Serializes Message into bytes.
 func (cm Message) Serialize() ([]byte, error) {
 	return []byte(cm.Content), nil
+}
+
+func (cm Message) Len() int64 {
+	return int64(len(cm.Content))
 }
 
 // DeserializeMessage deserializes bytes into Message.

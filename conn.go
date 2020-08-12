@@ -610,13 +610,14 @@ func readLoop(c WriteCloser, wg *sync.WaitGroup) {
 				return
 			}
 			setHeartBeatFunc(time.Now().UnixNano())
-			handler := GetHandlerFunc(msg.MessageNumber())
+			responseCommand := msg.ResponseCommand()
+			handler := GetHandlerFunc(responseCommand)
 			if handler == nil {
 				if onMessage != nil {
-					holmes.Infof("message %d call onMessage()\n", msg.MessageNumber())
+					holmes.Infof("message %d call onMessage()\n", responseCommand)
 					onMessage(msg, c.(WriteCloser))
 				} else {
-					holmes.Warnf("no handler or onMessage() found for message %d\n", msg.MessageNumber())
+					holmes.Warnf("no handler or onMessage() found for message %d\n", responseCommand)
 				}
 				continue
 			}

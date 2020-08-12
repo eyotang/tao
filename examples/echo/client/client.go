@@ -5,13 +5,13 @@ import (
 	"net"
 	"time"
 
+	"github.com/eyotang/tao"
+	"github.com/eyotang/tao/examples/echo"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
-	"github.com/leesper/tao/examples/echo"
 )
 
 func main() {
-	tao.Register(echo.Message{}.MessageNumber(), echo.DeserializeMessage, nil)
+	tao.Register(echo.Message{}.ResponseCommand(), echo.DeserializeMessage, nil)
 
 	c, err := net.Dial("tcp", "127.0.0.1:12345")
 	if err != nil {

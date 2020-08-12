@@ -5,9 +5,9 @@ import (
 	"net"
 	"runtime"
 
+	"github.com/eyotang/tao"
+	"github.com/eyotang/tao/examples/pingpong"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
-	"github.com/leesper/tao/examples/pingpong"
 )
 
 // PingPongServer defines pingpong server.
@@ -39,7 +39,7 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	defer holmes.Start().Stop()
 	tao.MonitorOn(12345)
-	tao.Register(pingpong.PingPontMessage, pingpong.DeserializeMessage, ProcessPingPongMessage)
+	tao.Register(pingpong.PingPongMessage, pingpong.DeserializeMessage, ProcessPingPongMessage)
 
 	l, err := net.Listen("tcp", ":12346")
 	if err != nil {

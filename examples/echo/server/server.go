@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"syscall"
 
+	"github.com/eyotang/tao"
+	"github.com/eyotang/tao/examples/echo"
 	"github.com/leesper/holmes"
-	"github.com/leesper/tao"
-	"github.com/leesper/tao/examples/echo"
 )
 
 // EchoServer represents the echo server.
@@ -46,7 +46,7 @@ func main() {
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	tao.Register(echo.Message{}.MessageNumber(), echo.DeserializeMessage, echo.ProcessMessage)
+	tao.Register(echo.Message{}.ResponseCommand(), echo.DeserializeMessage, echo.ProcessMessage)
 
 	l, err := net.Listen("tcp", ":12345")
 	if err != nil {
