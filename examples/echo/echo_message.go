@@ -42,6 +42,8 @@ func (em Message) ResponseName() string {
 	return EchoMessageName
 }
 
+func (em Message) SetCustom(interface{}) {}
+
 // DeserializeMessage deserializes bytes into Message.
 func DeserializeMessage(data []byte) (message tao.Message, err error) {
 	if data == nil {

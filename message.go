@@ -92,6 +92,7 @@ type Message interface {
 	RequestCommand() int32
 	ResponseCommand() int32
 	Serialize() ([]byte, error)
+	SetCustom(v interface{})
 }
 
 // HeartBeatMessage for application-level keeping alive.
@@ -127,6 +128,9 @@ func (hbm HeartBeatMessage) RequestName() string {
 // ResponseName returns message name.
 func (hbm HeartBeatMessage) ResponseName() string {
 	return HeartBeatName
+}
+
+func (hbm HeartBeatMessage) SetCustom(interface{}) {
 }
 
 // DeserializeHeartBeat deserializes bytes into Message.

@@ -43,6 +43,8 @@ func (cm Message) Serialize() ([]byte, error) {
 	return []byte(cm.Content), nil
 }
 
+func (cm Message) SetCustom(interface{}) {}
+
 // DeserializeMessage deserializes bytes into Message.
 func DeserializeMessage(data []byte) (message tao.Message, err error) {
 	if data == nil {

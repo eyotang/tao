@@ -35,6 +35,8 @@ func (pp Message) Serialize() ([]byte, error) {
 	return []byte(pp.Info), nil
 }
 
+func (pp Message) SetCustom(interface{}) {}
+
 // DeserializeMessage deserializes bytes into Message.
 func DeserializeMessage(data []byte) (message tao.Message, err error) {
 	if data == nil {
