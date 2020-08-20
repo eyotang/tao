@@ -3,7 +3,10 @@ package tao
 import (
 	"context"
 	"crypto/tls"
+	"errors"
+	"fmt"
 	"net"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -515,7 +518,10 @@ func runEvery(ctx context.Context, netID int64, timing *TimingWheel, d time.Dura
 func asyncWrite(c interface{}, m Message) (err error) {
 	defer func() {
 		if p := recover(); p != nil {
-			err = ErrServerClosed
+			stackTrace := debug.Stack()
+			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
+			err = errors.New(errMsg)
+			//err = ErrServerClosed
 		}
 	}()
 
