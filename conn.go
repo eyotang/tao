@@ -589,7 +589,8 @@ func readLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			holmes.Errorf("panics: %v\n%s", p, stackTrace)
 		}
 		wg.Done()
 		holmes.Debugln("readLoop go-routine exited")
@@ -659,7 +660,8 @@ func writeLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			holmes.Errorf("panics: %v\n%s", p, stackTrace)
 		}
 		// drain all pending messages before exit
 	OuterFor:
@@ -732,7 +734,8 @@ func handleLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			holmes.Errorf("panics: %v\n%s", p, stackTrace)
 		}
 		wg.Done()
 		holmes.Debugln("handleLoop go-routine exited")
