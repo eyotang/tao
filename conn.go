@@ -586,7 +586,7 @@ func readLoop(c WriteCloser, wg *sync.WaitGroup) {
 	defer func() {
 		if p := recover(); p != nil {
 			stackTrace := debug.Stack()
-			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
+			errMsg := fmt.Sprintf("panics: %v\n%s", p, stackTrace)
 			holmes.Errorln(errMsg)
 		}
 		wg.Done()
@@ -659,7 +659,7 @@ func writeLoop(c WriteCloser, wg *sync.WaitGroup) {
 	defer func() {
 		if p := recover(); p != nil {
 			stackTrace := debug.Stack()
-			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
+			errMsg := fmt.Sprintf("panics: %v\n%s", p, stackTrace)
 			holmes.Errorln(errMsg)
 		}
 		// drain all pending messages before exit
@@ -733,7 +733,9 @@ func handleLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			errMsg := fmt.Sprintf("panics: %v\n%s", p, stackTrace)
+			holmes.Errorln(errMsg)
 		}
 		wg.Done()
 		holmes.Debugln("handleLoop go-routine exited")
