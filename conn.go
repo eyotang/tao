@@ -3,7 +3,6 @@ package tao
 import (
 	"context"
 	"crypto/tls"
-	"errors"
 	"fmt"
 	"net"
 	"runtime/debug"
@@ -518,10 +517,7 @@ func runEvery(ctx context.Context, netID int64, timing *TimingWheel, d time.Dura
 func asyncWrite(c interface{}, m Message) (err error) {
 	defer func() {
 		if p := recover(); p != nil {
-			stackTrace := debug.Stack()
-			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
-			err = errors.New(errMsg)
-			//err = ErrServerClosed
+			err = ErrServerClosed
 		}
 	}()
 
@@ -589,7 +585,9 @@ func readLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
+			holmes.Errorln(errMsg)
 		}
 		wg.Done()
 		holmes.Debugln("readLoop go-routine exited")
@@ -607,12 +605,13 @@ func readLoop(c WriteCloser, wg *sync.WaitGroup) {
 		default:
 			msg, err = codec.Decode(rawConn)
 			if err != nil {
-				holmes.Errorf("error decoding message %v\n", err)
 				if _, ok := err.(ErrUndefined); ok {
+					holmes.Warnf("error decoding message %v\n", err)
 					// update heart beats
 					setHeartBeatFunc(time.Now().UnixNano())
 					continue
 				}
+				holmes.Errorf("error decoding message %v\n", err)
 				return
 			}
 			setHeartBeatFunc(time.Now().UnixNano())
@@ -659,7 +658,9 @@ func writeLoop(c WriteCloser, wg *sync.WaitGroup) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			holmes.Errorf("panics: %v\n", p)
+			stackTrace := debug.Stack()
+			errMsg := fmt.Sprintf("%v\n%s", p, stackTrace)
+			holmes.Errorln(errMsg)
 		}
 		// drain all pending messages before exit
 	OuterFor:
